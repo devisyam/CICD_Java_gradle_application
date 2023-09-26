@@ -4,16 +4,22 @@ pipeline{
         VERSION = "${env.BUILD_ID}"
     }
     stages{
-        stage("build") {
-            steps {
-                sh "mvn clean package"
+        stage("sonar qube analysis"){
+            agent{
+               docker {
+                    image 'openjdk:11'
+               }
             }
-        }
-        stage("sonarqube analysis") {
-            steps {
-                withSonarQubeEnv('sonar-auth') {
-                    sh "mvn sonar:sonar"
-                }
+            environment {
+                SCANNER_HOME = tool 'sonar-scanner'
+                    script{
+                        withSonarQubeEnv(credentialsId: 'sonar-auth') {
+                            sh '''
+                                chmod +x gradlew
+                                ./gradlew sonarqube
+                      '''
+                        }
+                    }
             }
         }
     }
