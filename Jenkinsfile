@@ -6,6 +6,11 @@ pipeline {
     }
 
     stages {
+        stage('build) {
+              steps {
+                  sh "mvn clean package"
+              }
+        }
         stage("SonarQube Analysis") {
             agent {
                 docker {
