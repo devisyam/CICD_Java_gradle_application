@@ -6,11 +6,6 @@ pipeline {
     }
 
     stages {
-        stage("build") {
-              steps {
-                  sh "mvn clean package"
-              }
-        }
         stage("SonarQube Analysis") {
             agent {
                 docker {
@@ -25,7 +20,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv(credentialsId: 'sonar-auth') {
-                        sh "mvn sonar:sonar"
+                        sh "./gradlew build"
                     }
                 }
             }
