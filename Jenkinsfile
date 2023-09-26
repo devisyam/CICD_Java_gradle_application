@@ -10,6 +10,10 @@ pipeline{
                     image 'openjdk:11'
                }
             }
+            environment {
+                SCANNER_HOME = tool 'sonarqube'
+            }
+            
             steps{
                script{
                 withSonarQubeEnv(credentialsId: 'sonar-auth') {
